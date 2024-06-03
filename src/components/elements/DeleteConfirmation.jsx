@@ -1,9 +1,18 @@
 import { useContext } from "react";
-import { Form } from "react-router-dom";
+import { Form, useNavigation } from "react-router-dom";
 import UserProgressContext from "@/store/UserProgresContext";
+import { Button } from "../ui/button";
+import { Loader2 } from "lucide-react";
 
 const DeleteConfirmation = ({ feed }) => {
   const { setHideModal } = useContext(UserProgressContext);
+  const navigation = useNavigation()
+
+  const isSubmitting = navigation.state === 'submitting'
+
+  if(navigation.state === 'loading'){
+    setHideModal()
+  }
 
   return (
     <>
@@ -26,12 +35,13 @@ const DeleteConfirmation = ({ feed }) => {
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="inline-flex items-center text-zinc-950 gap-x-1.5 rounded-md  bg-zinc-50 px-3 py-1.5 text-sm font-medium hover:bg-zinc-200"
-                >
-                  Continue
-                </button>
+                <Button type='submit' variant='secondary' disabled={isSubmitting} >
+                {isSubmitting && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+                    Continue
+                </Button>
+                
               </div>
             </div>
           </div>

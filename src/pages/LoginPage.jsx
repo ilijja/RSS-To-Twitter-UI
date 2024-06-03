@@ -1,5 +1,6 @@
 import { redirect } from "react-router-dom";
 import Login from "@/components/elements/Login";
+import { checkIfLogged } from "@/util/auth";
 
 const LoginPage = () => {
   return (
@@ -38,6 +39,12 @@ export async function action({ request, params }) {
   localStorage.setItem('token', token)
 
   return redirect('/home');
+}
+
+export async function loader(){
+  
+  return checkIfLogged()
+
 }
 
 export default LoginPage;

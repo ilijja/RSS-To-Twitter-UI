@@ -6,12 +6,15 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { act, useContext } from "react";
 import UserProgressContext from "@/store/UserProgresContext";
 import { ButtonOutline } from "../ui/button-outline";
-import { Loader2, RefreshCcw } from "lucide-react";
+import { Globe, Loader2, RefreshCcw } from "lucide-react";
 import { useNavigation, useSubmit } from "react-router-dom";
 import { useToast } from "../ui/use-toast";
+import { Button } from "../ui/button";
+import AddWebsiteModal from "./AddWebsiteModal";
+import DashedContainer from "./DashedContainer";
 
 const YourBlog = () => {
-  const { feeds, activeFeed } = useContext(UserProgressContext);
+  const { feeds, activeFeed, setShowModal } = useContext(UserProgressContext);
   const submit = useSubmit();
   const navigation = useNavigation();
   // const {toast} = useToast();
@@ -23,8 +26,12 @@ const YourBlog = () => {
     formData.append("url", activeFeed.url);
     formData.append("name", activeFeed.name);
     formData.append("feedId", activeFeed._id);
-    formData.append("intent", "addWebsite")
+    formData.append("intent", "addWebsite");
     submit(formData, { method: "POST" });
+  };
+
+  const handleAddWebsite = () => {
+    setShowModal(<AddWebsiteModal />);
   };
 
   return (
@@ -45,25 +52,33 @@ const YourBlog = () => {
         <div className="flex flex-col gap-3">
           <div className="w-full flex justify-between align-middle items-center py-3">
             <div className="inline-flex h-8 gap-2 items-center">
-              {feeds.length > 0 && <ComboboxPicker />}
-              <ButtonOutline onClick={handleUpdateBlogs}>
-                {isSubmitting ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <RefreshCcw className="w-4 h-4" />
-                )}
-              </ButtonOutline>
+              {feeds.length > 0 && (
+                <>
+                  <ComboboxPicker />
+                  <ButtonOutline onClick={handleUpdateBlogs}>
+                    {isSubmitting ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <RefreshCcw className="w-4 h-4" />
+                    )}
+                  </ButtonOutline>
+                </>
+              )}
             </div>
+
+            {feeds.length <= 0 && (
+              <DashedContainer handleAddWebsite={handleAddWebsite} />
+            )}
 
             <div className="inline-flex gap-1">
               {feeds.length > 0 && <SwitchAutomatic />}
             </div>
           </div>
-          <BlogsTable />
+
+          {feeds.length > 0 && <BlogsTable />}
         </div>
 
-        
-        <Modal /> 
+        <Modal />
       </div>
     </>
   );

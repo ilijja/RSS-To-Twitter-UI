@@ -37,8 +37,8 @@ const Sidebar = ({ children }) => {
   };
 
   const handleDeleteTwitter = () => {
-    setShowModal(<RemoveTwitterAccount/>)
-  }
+    setShowModal(<RemoveTwitterAccount />);
+  };
 
   return (
     <>
@@ -188,7 +188,10 @@ const Sidebar = ({ children }) => {
                         <FaXTwitter />
                         <p>@{user.twitterUsername}</p>
                       </div>
-                      <Trash onClick={handleDeleteTwitter} className="h-4 w-4 mr-2 hidden group-hover:block" />
+                      <Trash
+                        onClick={handleDeleteTwitter}
+                        className="h-4 w-4 mr-2 hidden group-hover:block"
+                      />
                     </div>
                   </li>
                 )}
@@ -232,7 +235,7 @@ const Sidebar = ({ children }) => {
 
         <main>
           <RightContainer>
-            <div className="py-10 lg:pl-56 ">{children}</div>
+            <div className="py-10 lg:pl-56 bg-zinc-950 ">{children}</div>
           </RightContainer>
         </main>
       </div>

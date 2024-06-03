@@ -1,8 +1,27 @@
+import { Loader2 } from "lucide-react";
 import { useContext, useState } from "react";
-import { Form, useParams, useSubmit } from "react-router-dom";
+import { Form, useNavigation, useParams, useSubmit } from "react-router-dom";
+import { Button } from "../ui/button";
+import UserProgressContext from "@/store/UserProgresContext";
 
 const AddWebsiteModal = () => {
   const submit = useSubmit();
+  const navigation = useNavigation();
+
+  const {setHideModal} = useContext(UserProgressContext)
+
+  const isSubmitting = navigation.state === "submitting";
+
+  const text =
+    navigation.state === "submitting"
+      ? "Importing"
+      : navigation.state === "loading"
+      ? "Saved!"
+      : "Import";
+
+    if(navigation.state === 'loading'){
+      setHideModal()
+    }
 
   return (
     <>
@@ -54,14 +73,24 @@ const AddWebsiteModal = () => {
             </div>
           </div>
           <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
-            <button
+
+            <Button type="submit" name="intent" value="addWebsite" variant="secondary" size="sm" disabled={isSubmitting}>
+              {isSubmitting && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {text}
+            </Button>
+
+            {/* <button
               type="submit"
-              name="intent" value="addWebsite"
+              name="intent"
+              value="addWebsite"
               // onClick={importWebsiteHandler}
               className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-zinc-50 text-zinc-950 shadow hover:bg-zinc-50/90 h-9 px-4 py-2"
             >
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Import
-            </button>
+            </button> */}
           </div>
         </div>
       </Form>

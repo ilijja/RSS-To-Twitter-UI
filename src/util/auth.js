@@ -18,6 +18,7 @@ export function checkAuthLoader(){
 export function checkIfLogged(){
     const token = getAuthToken()
 
+    console.log(token);
     if(token){
         return redirect('/home')
     }

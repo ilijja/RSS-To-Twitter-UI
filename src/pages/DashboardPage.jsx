@@ -1,8 +1,26 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useActionData } from "react-router-dom";
 import Sidebar from "@/components/elements/Sidebar";
 import { getAuthToken } from "@/util/auth";
+import { useToast } from "@/components/ui/use-toast";
+import { useContext, useEffect } from "react";
+import UserProgressContext from "@/store/UserProgresContext";
 
 const DashboardPage = () => {
+
+  const {setHideModal} = useContext(UserProgressContext)
+  const actionData = useActionData();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if(actionData?.intent){
+      toast({
+        title: actionData.title,
+        description: actionData.msg,
+      })
+    }
+    setHideModal()
+  }, [actionData]);
+
   return (
       <Sidebar>
         <Outlet />
@@ -54,9 +72,11 @@ export async function action({ request, params }) {
 
   if (intent === "publishTweet") {
     const content = formData.get("content");
+    const blogId = formData.get("blogId")
 
     data = {
       content,
+      blogId,
     };
 
     url = "http://127.0.0.1:3030/twitter/tweet";

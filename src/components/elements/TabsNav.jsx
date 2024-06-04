@@ -6,7 +6,7 @@ import Options from "./Options";
 
 const tabs = [
   { name: "Your Blog", val: "blog" },
-  { name: "Generate", val: "generate" },
+  // { name: "Generate", val: "generate" },
 ];
 
 const TabsNav = () => {

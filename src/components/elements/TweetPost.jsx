@@ -10,14 +10,15 @@ import EditPost from "./EditPost";
 import UserProgressContext from "@/store/UserProgresContext";
 import { getAuthToken } from "@/util/auth";
 import { useSubmit } from "react-router-dom";
+import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
 
 const TweetPost = ({ tweetContent }) => {
-  const { setShowModal, setHideSheet, selectEmoji, setCurrentTweet } =
+  const { setShowModal,setHideSheet, selectEmoji, setCurrentTweet, user, activeBlog } =
     useContext(UserProgressContext);
 
-    const submit = useSubmit()
-
-  const [postContent, setPostContent] = useState(content);
+  const submit = useSubmit();
+  const { toast } = useToast();
 
   const editPostHandler = () => {
     setHideSheet();
@@ -28,33 +29,48 @@ const TweetPost = ({ tweetContent }) => {
 
   const handlePublishTweet = async () => {
 
-    const formData = new FormData()
-    formData.append('content', tweetContent)
-    formData.append('intent', 'publishTweet')
+    if (!user.twitterUsername) {
+      toast({
+        title: "Error",
+        description: "You must connect your X account frist.",
+      });
 
-    submit(formData, {method: 'POST'})
-   
-};
+      return;
+    }
 
+    try {
+      const formData = new FormData();
+      formData.append("content", tweetContent);
+      formData.append("intent", "publishTweet");
+      formData.append("blogId", activeBlog._id)
+
+      await submit(formData, { method: "POST" });
+    } finally {
+      setHideSheet(); 
+    }
+  };
 
   const actionButtons = (
     <div className="inline-flex justify-end w-full">
       <div className="inline-flex  gap-2 justify-between w-fit">
-        <button
+        <Button
           type="button"
           onClick={editPostHandler}
-          className="inline-flex items-center text-zinc-50 gap-x-1.5  outline outline-md outline-zinc-800 rounded-md bg-zinc-950 px-3 py-1.5 text-sm font-medium"
+          variant="outline"
+          size="sm"
         >
           Edit Post
-        </button>
-        <button
+        </Button>
+
+        <Button
           type="button"
           onClick={() => handlePublishTweet(tweetContent)}
-          className="inline-flex items-center text-zinc-950 gap-x-1.5 rounded-md  bg-zinc-50 px-3 py-1.5 text-sm font-medium"
+          variant="secondary"
+          size="sm"
         >
           Publish
           <FaXTwitter />
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -64,14 +80,16 @@ const TweetPost = ({ tweetContent }) => {
       <Container actionButtons={actionButtons}>
         <div className="inline-flex w-full h-full">
           <div className="flex  justify-middle align-middle h-full w-12">
-            <div className="w-12 h-12 rounded-full bg-zinc-50"></div>
+            <div className="w-10 h-10 rounded-full bg-zinc-50">
+            {user.twitterProfileImageUrl!=null ? <img className="w-full h-full rounded-full object-cover" src={user.twitterProfileImageUrl} alt="User Profile" />: ""}
+            </div>
           </div>
           <div className="flex flex-col py-1 px-2 w-full">
             <div className=" inline-flex gap-1 ">
               <p className="text-sm text-zinc-50 font-semibold">
-                Ilija Dimitrijevic
+                {user.twitterName ? user.twitterName : 'John Doe'}
               </p>
-              <p className="text-sm text-zinc-500 font-normal ">@ilijja</p>
+              <p className="text-sm text-zinc-500 font-normal ">{user.twitterUsername? '@' + user.twitterUsername : '@jdoe'}</p>
             </div>
 
             <div className="pt-1">

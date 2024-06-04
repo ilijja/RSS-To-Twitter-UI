@@ -8,19 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 const HomePage = () => {
   const { addFeeds, setTwitter, setHideModal } = useContext(UserProgressContext);
   const data = useLoaderData();
-  const actionData = useActionData();
-  const { toast } = useToast();
-
-  useEffect(() => {
-    if(actionData?.intent){
-      toast({
-        title: actionData.title,
-        description: actionData.msg,
-      })
-    }
-    setHideModal()
-  }, [actionData]);
-
+  
   useEffect(() => {
     addFeeds(data.data);
     setTwitter(data.user);

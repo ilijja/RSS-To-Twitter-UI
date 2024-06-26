@@ -3,6 +3,7 @@ Overview
 RSS to Twitter UI is a tool designed to automatically post updates from RSS feeds to a Twitter account. This application simplifies the process of keeping your Twitter followers up-to-date with the latest content from your favorite RSS feeds.
 
 Features
+
 Automatic Posting: Automatically tweets new RSS feed items.
 
 User Interface: Simple and intuitive web interface for managing RSS feeds and Twitter account settings.

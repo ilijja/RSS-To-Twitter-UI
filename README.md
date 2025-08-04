@@ -1,6 +1,6 @@
 # RSS-To-Twitter-UI
 
-An automated tool that reads RSS feeds and posts new entries on Twitter.
+An automated tool that reads RSS feeds and posts new entries on X (formerly Twitter).
 
 ---
 
